@@ -14,9 +14,9 @@ public class Csiga {
     private boolean kap;
     private int sebesseg;
     
-    public static final String CSIGA_PIROS = "\033[31m@";
-    public static final String CSIGA_ZOLD = "\033[32m@";
-    public static final String CSIGA_KEK = "\033[34m@";
+    public static final String CSIGA_PIROS = "\033[31m";
+    public static final String CSIGA_ZOLD = "\033[32m";
+    public static final String CSIGA_KEK = "\033[34m";
 
     public Csiga() {
   

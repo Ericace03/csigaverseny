@@ -25,6 +25,8 @@ public class Csigaverseny {
         System.out.println(csigaZöld);
         System.out.println(csigaKék);*/
         
+        //Jatek jatek = new Jatek();
+        //jatek.start();
         new Jatek();
     }
     
