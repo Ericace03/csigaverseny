@@ -15,7 +15,7 @@ public class Csigaverseny {
      */
     public static void main(String[] args) {
         
-        String csigaPiros = "\033[31m@";
+        /**String csigaPiros = "\033[31m@";
         String csigaZöld = "\033[32m@";
         String csigaKék = "\033[34m@";
         
@@ -23,7 +23,9 @@ public class Csigaverseny {
         
         System.out.println(csigaPiros);
         System.out.println(csigaZöld);
-        System.out.println(csigaKék);
+        System.out.println(csigaKék);*/
+        
+        new Jatek();
     }
     
 }
