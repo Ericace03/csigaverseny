@@ -15,7 +15,7 @@ public class Jatek {
     
     private int verseny;
     private int kor;
-    private boolean nyer;
+    private String nyer;
     private int fogad;
     private double esely;
     private boolean csigagyorsito;
@@ -40,11 +40,11 @@ public class Jatek {
         this.kor = kor;
     }
 
-    public boolean isNyer() {
+    public String isNyer() {
         return nyer;
     }
 
-    public void setNyer(boolean nyer) {
+    public void setNyer(String nyer) {
         this.nyer = nyer;
     }
 
@@ -80,11 +80,13 @@ public class Jatek {
         csigak[0] = new Csiga(Csiga.CSIGA_PIROS);
         csigak[1] = new Csiga(Csiga.CSIGA_ZOLD);
         csigak[2] = new Csiga(Csiga.CSIGA_KEK);
+        Csiga nyercsiga = csigak[0];
+        verseny=-1;
         
         System.out.println("Csigaverseny "+Csiga.CSIGA_PIROS+"@ "+Csiga.CSIGA_ZOLD+"@ "+Csiga.CSIGA_KEK+"@");
         System.out.println("Melyik csiga fog nyerni? 1-Piros, 2-Zöld, 3-Kék. Tippelj: ");
         
-        int fogad = scanner.nextInt();
+        fogad = scanner.nextInt();
         setFogad(fogad);
 
         String fogadas = "Nincs ilyen @. Vége a játéknak!";
@@ -114,7 +116,8 @@ public class Jatek {
                 
                 for (Csiga csiga : csigak) {
                     csiga.randomSebesseg();
-                    if (random.nextDouble() < 0.2) {
+                    esely = random.nextDouble();
+                    if (esely < 0.2) {
                         csigagyorsito = true;
                         csiga.setKap(csigagyorsito);
                         csiga.setSebesseg(csiga.getSebesseg() * 2);
@@ -127,9 +130,29 @@ public class Jatek {
                     }
                     
                     System.out.println(csiga.getSzin() + lepesPont.toString() + "@");
+
+                    if (csiga.getMessze() > nyercsiga.getMessze()) {
+                        nyercsiga = csiga;
+                        nyer=csiga.getSzin();
+                    }
                 }
-               
         }
+        
+        System.out.println("Vége");
+        System.out.println(nyer + "A @ nyert!");
+        for (int i = 0; i < csigak.length; i++) {
+            if (csigak[i] == nyercsiga) {
+                verseny=i+1;
+                break;
+            }
+        }
+        if (fogad == verseny) {
+            System.out.println("Helyes volt a tipped.");
+        }
+        else {
+            System.out.println("Rossz volt a tipped.");
+        }
+ 
+    }
 }
-}
-    
+
