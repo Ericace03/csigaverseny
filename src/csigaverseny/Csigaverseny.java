@@ -15,18 +15,6 @@ public class Csigaverseny {
      */
     public static void main(String[] args) {
         
-        /**String csigaPiros = "\033[31m@";
-        String csigaZöld = "\033[32m@";
-        String csigaKék = "\033[34m@";
-        
-        System.out.println("Start");
-        
-        System.out.println(csigaPiros);
-        System.out.println(csigaZöld);
-        System.out.println(csigaKék);*/
-        
-        //Jatek jatek = new Jatek();
-        //jatek.start();
         new Jatek();
     }
     
