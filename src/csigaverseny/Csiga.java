@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package csigaverseny;
+
 import java.util.Random;
 
 /**
@@ -15,6 +16,7 @@ public class Csiga {
     private boolean kap;
     private String szin;
     private int sebesseg;
+    private static Random random = new Random();
     
     public static final String CSIGA_PIROS = "\033[31m";
     public static final String CSIGA_ZOLD = "\033[32m";
@@ -64,7 +66,6 @@ public class Csiga {
     }
     
     public void randomSebesseg() {
-        Random random = new Random();
         this.sebesseg = random.nextInt(4);
     }
 }

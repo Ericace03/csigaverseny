@@ -6,6 +6,8 @@ package csigaverseny;
 
 import java.util.Scanner;
 import java.util.Random;
+import java.util.InputMismatchException;
+
 
 /**
  *
@@ -19,6 +21,7 @@ public class Jatek {
     private int fogad;
     private double esely;
     private boolean csigagyorsito;
+    private Csiga nyercsiga;
     
     public Jatek() {      
         start();
@@ -74,25 +77,47 @@ public class Jatek {
     
     public void start() {
        
-        Scanner scanner = new Scanner(System.in);
+        
         Random random = new Random();
         Csiga[] csigak = new Csiga[3];
         csigak[0] = new Csiga(Csiga.CSIGA_PIROS);
         csigak[1] = new Csiga(Csiga.CSIGA_ZOLD);
         csigak[2] = new Csiga(Csiga.CSIGA_KEK);
-        Csiga nyercsiga = csigak[0];
+        nyercsiga = csigak[0];
         verseny=-1;
-        boolean dontetlen = false;
         
-        // Csigák és fogadás
-        System.out.println("Csigaverseny "+Csiga.CSIGA_PIROS+"@ "+Csiga.CSIGA_ZOLD+"@ "+Csiga.CSIGA_KEK+"@");
-        System.out.println("Melyik csiga fog nyerni? 1-Piros, 2-Zöld, 3-Kék. Tippelj: ");
-        
-        fogad = scanner.nextInt();
+        fogad = fogadas();
         setFogad(fogad);
-
-        String fogadas = "Nincs ilyen @. Vége a játéknak!";
-            switch (fogad) {
+        kezdes(csigak);
+        korok(csigak, random);
+        eredmeny(csigak);
+    }
+    
+    public int fogadas() {
+        
+        Scanner scanner = new Scanner(System.in);
+           
+        System.out.println("Csigaverseny "+Csiga.CSIGA_PIROS+"@ "+Csiga.CSIGA_ZOLD+"@ "+Csiga.CSIGA_KEK+"@");
+            
+        while (fogad < 1 || fogad > 3) {
+            try {
+                System.out.println("Melyik csiga fog nyerni? 1-Piros, 2-Zöld, 3-Kék. Tippelj: ");
+                fogad = scanner.nextInt();
+                setFogad(fogad);
+            
+                if (fogad < 1 || fogad > 3) {
+                    System.out.println("Nincs ilyen @. Kérlek, válassz 1 és 3 közötti számot!");
+                }
+            }   
+            catch (InputMismatchException e) {
+                System.out.println("Hiba! Kérlek, csak 1 és 3 közötti számot írj be.");
+                scanner.next();
+                }
+            }
+            
+        String fogadas = "";
+            
+        switch (fogad) {
             case 1:
                 fogadas = Csiga.CSIGA_PIROS+"A piros @-ra fogadtál!";
                 break;
@@ -102,52 +127,59 @@ public class Jatek {
             case 3:
                 fogadas = Csiga.CSIGA_KEK+"A kék @-ra fogadtál!";
                 break;
-            }
+        }
         
         System.out.println(fogadas);
-        
-        // Kezdés
+           
+        return fogad;
+    }
+    
+    public void kezdes (Csiga[] csigak) {
+    
         System.out.println("Start");
         
         for (Csiga csiga : csigak) {
             System.out.println(csiga.getSzin() + "@");
         }
-         
-        // Körök kiírása
+    }
+    
+    private void korok (Csiga[] csigak, Random random) {
+        
         for (int kor = 0; kor < 5; kor++) {
                 
             System.out.println((kor+1)+". kör");
                 
-                // Helyzet csigagyorsítóval, ha kap
-                for (Csiga csiga : csigak) {
-                    csiga.randomSebesseg();
-                    esely = random.nextDouble();
-                    if (esely < 0.2) {
-                        csigagyorsito = true;
-                        csiga.setKap(csigagyorsito);
-                        csiga.setSebesseg(csiga.getSebesseg() * 2);
-                    }
-                    csiga.setMessze(csiga.getMessze() + csiga.getSebesseg()); 
-                
-                    StringBuilder lepesPont = new StringBuilder();
-                    for (int j = 0; j < csiga.getMessze(); j++) {
-                    lepesPont.append(".");
-                    }
-                    
-                    System.out.println(csiga.getSzin() + lepesPont.toString() + "@");
-                    
-                    // a legnagyobb távolságú csiga a nyertes
-                    if (csiga.getMessze() >= nyercsiga.getMessze()) {
-                        nyercsiga = csiga;
-                        nyer=csiga.getSzin();
-                        //System.out.println("csiga: " + csiga.getMessze());
-                        //System.out.println("nyercsiga: " + nyercsiga.getMessze());
-                        //System.out.println("Nyertes: " + nyer + "@");
-                    }
+            // Helyzet csigagyorsítóval, ha kap
+            for (Csiga csiga : csigak) {
+                csiga.randomSebesseg();
+                esely = random.nextDouble();
+                if (esely < 0.2) {
+                    csigagyorsito = true;
+                    csiga.setKap(csigagyorsito);
+                    csiga.setSebesseg(csiga.getSebesseg() * 2);
                 }
+                csiga.setMessze(csiga.getMessze() + csiga.getSebesseg()); 
+                
+                StringBuilder lepesPont = new StringBuilder();
+                for (int j = 0; j < csiga.getMessze(); j++) {
+                    lepesPont.append(".");
+                }
+                    
+                System.out.println(csiga.getSzin() + lepesPont.toString() + "@");
+                    
+                // a legnagyobb távolságú csiga a nyertes
+                if (csiga.getMessze() >= nyercsiga.getMessze()) {
+                    nyercsiga = csiga;
+                    nyer=csiga.getSzin();
+                }
+            }
         }
+    }
+    
+    public void eredmeny (Csiga[] csigak) {
         
-        // ha több, mint 1 nyertes van döntetlen
+        //Döntetlen-e
+        boolean dontetlen = false;
         for (Csiga csiga : csigak) {
             if (csiga.getMessze() == nyercsiga.getMessze() && csiga != nyercsiga){
                 dontetlen = true;
@@ -161,9 +193,9 @@ public class Jatek {
             }
         else {
             System.out.println("Döntetlen az eredmény!");
-            }
+        }
         
-        // jó/rossz tipp kijelzése
+        // Eredmény kijelzése
         for (int i = 0; i < csigak.length; i++) {
             if (csigak[i].equals(nyercsiga)) {
                 verseny=i+1;
@@ -180,5 +212,5 @@ public class Jatek {
         else {
             System.out.println("Rossz volt a tipped.");
         }
-    }
+    }    
 }
